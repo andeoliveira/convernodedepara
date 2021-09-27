@@ -1,7 +1,7 @@
 const utils = require('../utils/utils');
 const familiaRepo = require('../repositories/familiaRepository')
 
-const carregarLista = async (req, res) => {
+const carregarListaPessoas = async (req, res) => {
     
     const resSQL = await familiaRepo.buscarFamiliasOrigem(req, res);
 
@@ -10,13 +10,12 @@ const carregarLista = async (req, res) => {
         return arrObjFamilia;
     }
 
-   
 }
 
 const gerarFamiliaPessoa = async(resSQL, req, res) => {
     
     const arrPessoaFamilia = [];
-    
+
     for (let item of resSQL) {
         
         try {
@@ -41,11 +40,12 @@ const gerarFamiliaPessoa = async(resSQL, req, res) => {
 }
 
 const converterEmPessoaFamilia = async(pessoa) => {
+
     const objFamilia = {};
     objFamilia.cod_livro = pessoa.lf_livro_cod;
     objFamilia.titulo = formatarTitulo(pessoa);
     
-    objFamilia.nome_completo = formatarNome(pessoa.lf_nome, pessoa.lf_sobrenome);
+    objFamilia.nome_completo = utils.formatarNome(pessoa.lf_nome, pessoa.lf_sobrenome);
     objFamilia.data_nascimento = pessoa.lf_dt_nas;
     objFamilia.data_morte = pessoa.lf_dt_mor;
     objFamilia.local_nascimento = pessoa.lf_nac_cidade ? utils.primeiraLetraMaiuscula(pessoa.lf_nac_cidade) : undefined;
@@ -54,7 +54,7 @@ const converterEmPessoaFamilia = async(pessoa) => {
     
     objFamilia.observacao = pessoa.lf_livro_obs ? utils.capitalize(pessoa.lf_livro_obs.toLowerCase()) : undefined;
 
-    objFamilia.nome_completo_conjuge = formatarNome(pessoa.lf_conjugue_nome, pessoa.lf_conjugue_sobrenome);
+    objFamilia.nome_completo_conjuge = utils.formatarNome(pessoa.lf_conjugue_nome, pessoa.lf_conjugue_sobrenome);
     objFamilia.data_nascimento_conjuge = pessoa.lf_conjugue_nas;
     objFamilia.data_morte_conjuge = pessoa.lf_conjugue_morte;
     objFamilia.local_morte_conjuge = pessoa.lf_conjugue_morte_lugar ? utils.primeiraLetraMaiuscula(pessoa.lf_conjugue_morte_lugar) : undefined;
@@ -80,6 +80,7 @@ const converterEmPessoaFamilia = async(pessoa) => {
 
     objFamilia.pais_local_casamento_conjuge = pessoa.lf_conjugue_pais_casa_local ? utils.primeiraLetraMaiuscula(pessoa.lf_conjugue_pais_casa_local) : '';
     objFamilia.pais_data_casamento_conjuge = pessoa.lf_conjugue_pais_casa_dt;
+    
     return objFamilia;
 }
 
@@ -109,21 +110,6 @@ const formatarTitulo = (pessoa) => {
 
     return titulo;
 }
-
-const formatarNome = (nome, sobrenome) => {
-
-    let nomeCompleto = '';
-    
-    if (nome) {
-        nomeCompleto = utils.primeiraLetraMaiuscula(nome.toLowerCase());
-    }
-    if (sobrenome) {
-        nomeCompleto = nomeCompleto + " "+utils.primeiraLetraMaiuscula(sobrenome.toLowerCase());
-    }
-
-    return nomeCompleto;
-}
-
 
 
 async function carregarFilhos(req,res, cod_livro) {
@@ -161,4 +147,4 @@ async function carregarFilhos(req,res, cod_livro) {
       
 }
 
-module.exports = {carregarLista}
+module.exports = {carregarListaPessoas}
