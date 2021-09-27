@@ -8,10 +8,10 @@ const formatarNome = (nome, sobrenome) => {
     let nomeCompleto = '';
     
     if (nome) {
-        nomeCompleto = utils.primeiraLetraMaiuscula(nome.toLowerCase());
+        nomeCompleto = primeiraLetraMaiuscula(nome.toLowerCase());
     }
     if (sobrenome) {
-        nomeCompleto = nomeCompleto + " "+utils.primeiraLetraMaiuscula(sobrenome.toLowerCase());
+        nomeCompleto = nomeCompleto + " "+primeiraLetraMaiuscula(sobrenome.toLowerCase());
     }
 
     return nomeCompleto;

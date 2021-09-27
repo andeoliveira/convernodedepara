@@ -1,6 +1,8 @@
+//Dependências
 const utils = require('../utils/utils');
 const familiaRepo = require('../repositories/familiaRepository')
 
+//Busca no repositorio as familias cadastradas na base origem
 const carregarListaPessoas = async (req, res) => {
     
     const resSQL = await familiaRepo.buscarFamiliasOrigem(req, res);
@@ -12,6 +14,7 @@ const carregarListaPessoas = async (req, res) => {
 
 }
 
+//Após obtenção do resultado da busca SQL nos percore item a item para transformar os objetos.
 const gerarFamiliaPessoa = async(resSQL, req, res) => {
     
     const arrPessoaFamilia = [];
@@ -39,11 +42,12 @@ const gerarFamiliaPessoa = async(resSQL, req, res) => {
     return arrPessoaFamilia;
 }
 
+// Transforma objetos/listas do banco origem em objeto/listas pessoa e filhos
 const converterEmPessoaFamilia = async(pessoa) => {
 
     const objFamilia = {};
     objFamilia.cod_livro = pessoa.lf_livro_cod;
-    objFamilia.titulo = formatarTitulo(pessoa);
+    objFamilia.titulo = formatarTituloPost(pessoa);
     
     objFamilia.nome_completo = utils.formatarNome(pessoa.lf_nome, pessoa.lf_sobrenome);
     objFamilia.data_nascimento = pessoa.lf_dt_nas;
@@ -64,7 +68,7 @@ const converterEmPessoaFamilia = async(pessoa) => {
     objFamilia.local_casamento = pessoa.lf_conjugue_casamento_local ? utils.primeiraLetraMaiuscula(pessoa.lf_conjugue_casamento_local) : undefined;
     objFamilia.data_casamento = pessoa.lf_conjugue_casamento_dt;
 
-    objFamilia.observacao_conjuge = pessoa.lf_conjugue_obs ? capitalize(pessoa.lf_conjugue_obs.toLowerCase()) : undefined;
+    objFamilia.observacao_conjuge = pessoa.lf_conjugue_obs ? utils.capitalize(pessoa.lf_conjugue_obs.toLowerCase()) : undefined;
 
     objFamilia.pai_nome_conjuge = pessoa.lf_conjugue_pai_nome ? utils.primeiraLetraMaiuscula(pessoa.lf_conjugue_pai_nome) : undefined;
     objFamilia.pai_data_nascimento_conjuge = pessoa.lf_conjugue_pai_nas;
@@ -84,7 +88,7 @@ const converterEmPessoaFamilia = async(pessoa) => {
     return objFamilia;
 }
 
-const formatarTitulo = (pessoa) => {
+const formatarTituloPost = (pessoa) => {
 
     let titulo = pessoa.lf_livro_cod;
 
