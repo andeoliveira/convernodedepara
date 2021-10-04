@@ -15,6 +15,7 @@ const formatarNome = (nome, sobrenome) => {
     }
 
     return nomeCompleto;
+    
 }
 
 

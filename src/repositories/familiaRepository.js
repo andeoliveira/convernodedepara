@@ -12,7 +12,7 @@
 
     } 
     
-    async function buscarPessoaFamiliaOrigem(req, res, cod_livro_pessoa, url) {
+    async function buscarPessoaFamiliaOrigem(req, res, cod_livro_pessoa) {
 
         const conn = await db.connect('origem');
         const query = await conn.query("select lf_livro_cod, lf_nome, lf_sobrenome from tbl_cli where lf_livro_cod = ?", [cod_livro_pessoa]);
@@ -20,4 +20,12 @@
 
     }  
 
-    module.exports = {buscarFamiliasOrigem, buscarPessoaFamiliaOrigem}
+    async function insertTblPostFamilia(req, res, familiaSQL) {
+
+        const conn = await db.connect('origem');
+        const query = await conn.query("select lf_livro_cod, lf_nome, lf_sobrenome from tbl_cli where lf_livro_cod = ?", [cod_livro_pessoa]);
+        return query[0];
+
+    }  
+
+    module.exports = {buscarFamiliasOrigem, buscarPessoaFamiliaOrigem, insertTblPostFamilia}
