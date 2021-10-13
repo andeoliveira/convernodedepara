@@ -2,6 +2,7 @@
 const familiaRepo = require('../repositories/familiaRepository')
 const familiaDestino = require('./familiaDestinoService')
 const familiaFilhos = require('./familiaFilhosService')
+const wpServicePost = require('./geradorInserPostWP')
 
 //Busca no repositorio as familias cadastradas na base origem
 const carregarListaPessoas = async (req, res) => {
@@ -27,6 +28,7 @@ const gerarFamiliaPessoa = async(resSQL, req, res) => {
             let pessoa = await familiaDestino.converterFamiliaPessoa(item)
             let filhos = await familiaFilhos.carregar(req, res, pessoa.cod_livro)
             pessoa.filhos = filhos 
+            await wpServicePost.gerarScriptInsertPost(req, res, pessoa);
             arrPessoaFamilia.push(pessoa);
             
         } catch (error) {
