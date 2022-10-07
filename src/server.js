@@ -10,4 +10,8 @@ app.use(routes);
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, '/views'));
 
-app.listen(8081);
+
+app.listen(8081, () => {
+    console.log(`Running in http://localhost:8081`);
+})
+
