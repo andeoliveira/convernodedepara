@@ -15,12 +15,14 @@ const gerarScriptInsertPost = async(req, res, pessoa) => {
     stringSQL = 
     "#----------------------------------INSERT WP_POSTS----------------------------\n"+
     "INSERT INTO oarticoc_wp809.wpst_posts(ID,post_author,post_date,post_date_gmt,post_content,post_title,post_excerpt,post_status,comment_status,ping_status,post_name,to_ping,pinged,post_modified,post_modified_gmt,post_content_filtered,post_parent,guid,menu_order,post_type,comment_count) \nVALUES "+
-    "(select (max(id) +1) from wpst_posts,1,'"+pessoa.titulo+"',"+htmlWP+");\n"+
+    "((select (max(id +1) from wpst_posts), 1, '2022-10-10 21:30:00', '2022-10-10 21:30:00', "+htmlWP+", '"+pessoa.titulo+"', '', 'publish', 'closed', 'closed','"+pessoa.cod_livro+"', '', '', '2022-10-10 21:30:00', '2022-10-10 21:30:00', '', 0, '', 0, 'post', 0);\n"+
     
     "#----------------------------------INSERT WP_TERM_RELATIONSHIPS----------------------------\n"+
     "INSERT INTO oarticoc_wp809.wpst_term_relationships (object_id,term_taxonomy_id,term_order) \nVALUES"+
-    "(select (max(id) +1) from wpst_term_relationships, 4, 0);\n"
+    "((select max(id) from wpst_posts), 4, 0);\n"
     "                                                                                           \n";
+
+
     console.log(stringSQL);
     
     await gerarScript(stringSQL)
