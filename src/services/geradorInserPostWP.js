@@ -14,8 +14,8 @@ const gerarScriptInsertPost = async(req, res, pessoa) => {
     
     stringSQL = 
     "#----------------------------------INSERT WP_POSTS----------------------------\n"+
-    "INSERT INTO oarticoc_wp809.wpst_posts(ID,post_author,post_date,post_date_gmt,post_content,post_title,post_excerpt,post_status,comment_status,ping_status,post_name,to_ping,pinged,post_modified,post_modified_gmt,post_content_filtered,post_parent,guid,menu_order,post_type,comment_count) \nVALUES "+
-    "((select (max(id +1) from wpst_posts), 1, '2022-10-10 21:30:00', '2022-10-10 21:30:00', "+htmlWP+", '"+pessoa.titulo+"', '', 'publish', 'closed', 'closed','"+pessoa.cod_livro+"', '', '', '2022-10-10 21:30:00', '2022-10-10 21:30:00', '', 0, '', 0, 'post', 0);\n"+
+    "INSERT INTO oarticoc_wp809.wpst_posts(post_author,post_date,post_date_gmt,post_content,post_title,post_excerpt,post_status,comment_status,ping_status,post_name,to_ping,pinged,post_modified,post_modified_gmt,post_content_filtered,post_parent,guid,menu_order,post_type,comment_count) \nVALUES "+
+    "(1, '2022-10-10 21:30:00', '2022-10-10 21:30:00', "+htmlWP+", '"+pessoa.titulo+"', '', 'publish', 'closed', 'closed','"+replaceDot(pessoa.cod_livro)+"', '', '', '2022-10-10 21:30:00', '2022-10-10 21:30:00', '', 0, '', 0, 'post', 0);\n"+
     
     "#----------------------------------INSERT WP_TERM_RELATIONSHIPS----------------------------\n"+
     "INSERT INTO oarticoc_wp809.wpst_term_relationships (object_id,term_taxonomy_id,term_order) \nVALUES"+
@@ -167,7 +167,7 @@ const gerarTerceiroParagrafoHTML = async(filhos) => {
     let pInicio = "<!-- wp:paragraph -->"+"\n"+"<p>"
     let pConteudo = "Filhos:<br>"
     filhos.forEach(filho => {
-        pConteudo += "<a href=\"https://familiamezzomo.com.br/"+filho.lf_livro_cod+"\">"+filho.lf_livro_cod +" - " +filho.lf_nome +" "+ filho.lf_sobrenome+"</a><br>"
+        pConteudo += "<a href=\"https://familiamezzomo.com.br/"+replaceDot(filho.lf_livro_cod)+"\">"+filho.lf_livro_cod +" - " +filho.lf_nome +" "+ filho.lf_sobrenome+"</a><br>"
     });
     let pFim = "</p>"+"\n"+"<!-- /wp:paragraph -->"
 
@@ -179,6 +179,11 @@ const gerarScript = async(dataSQL) => {
         if (err)  throw err;
         console.log("Arquivo criado com sucesso")
     })
+}
+
+const replaceDot = (cod_livro) => {
+    const res = cod_livro.toString().split('.').join('-')
+    return res
 }
 
 module.exports = {gerarScriptInsertPost}
